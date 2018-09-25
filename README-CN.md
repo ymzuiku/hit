@@ -102,7 +102,7 @@ import . "github.com/ymzuiku/hit"
 
 func main(){
     value1 := If("test", "ok")
-    log.Println(value1) // ok
+    log.Println(value1) // "ok"
     
     value2 := If(500, "ok")
     log.Println(value2) // "ok"
@@ -124,7 +124,7 @@ import . "github.com/ymzuiku/hit"
 
 func main(){
     value1 := Or("test", "ok")
-    log.Println(value1) // ok
+    log.Println(value1) // "test"
     
     value2 := Or(500, "ok")
     log.Println(value2) // 500
