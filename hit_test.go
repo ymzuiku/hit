@@ -94,6 +94,22 @@ func TestIf7(t *testing.T) {
 	}
 }
 
+func TestIf7a(t *testing.T) {
+	expect := 50
+	a := If(0.0, 5, 50)
+	if a != expect {
+		t.Errorf(`a := If(0.0, 5, 50)`)
+	}
+}
+
+func TestIf7b(t *testing.T) {
+	expect := 50
+	a := If(uint(0), 5, 50)
+	if a != expect {
+		t.Errorf(`a := If(uint(0), 5, 50)`)
+	}
+}
+
 func TestIf8(t *testing.T) {
 	expect := 5
 	a := If(299, 5, 50)
@@ -208,6 +224,27 @@ func TestAnd6(t *testing.T) {
 	}
 }
 
+func TestAnd7(t *testing.T) {
+	a := If(0, 5)
+	if a != nil {
+		t.Errorf(`a := If(0, 5)`)
+	}
+}
+
+func TestAnd7a(t *testing.T) {
+	a := If(0.0, 5)
+	if a != nil {
+		t.Errorf(`a := If(0.0, 5)`)
+	}
+}
+
+func TestAnd7b(t *testing.T) {
+	a := If(uint(0), 5)
+	if a != nil {
+		t.Errorf(`a := If(uint(0), 5)`)
+	}
+}
+
 func TestOr0(t *testing.T) {
 	a := Or(500)
 	if a != 500 {
@@ -248,6 +285,20 @@ func TestOr3(t *testing.T) {
 	a := Or(0, 5)
 	if a != 5 {
 		t.Errorf(`a := Or(0, 5)`)
+	}
+}
+
+func TestOr3a(t *testing.T) {
+	a := Or(0.0, 5)
+	if a != 5 {
+		t.Errorf(`a := Or(0.0, 5)`)
+	}
+}
+
+func TestOr3b(t *testing.T) {
+	a := Or(uint(0), 5)
+	if a != 5 {
+		t.Errorf(`a := Or(uint(0), 5)`)
 	}
 }
 

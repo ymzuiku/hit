@@ -25,6 +25,20 @@ func callFn(f interface{}) interface{} {
 	return f
 }
 
+func isZero(f interface{}) bool  {
+	v := reflect.ValueOf(f)
+	switch v.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return v.Float() == 0
+	default:
+		return false
+	}
+}
+
 // TestFnTime run func use time
 func TestFnTime(f interface{}) string {
 	start := time.Now()
@@ -55,10 +69,8 @@ func If(args ...interface{}) interface{} {
 		if v == false {
 			return callFn(falseVal)
 		}
-	} else if v, ok := condition.(int); ok {
-		if v == 0 {
-			return callFn(falseVal)
-		}
+	} else if isZero(condition) {
+		return callFn(falseVal)
 	} else if v, ok := condition.(string); ok {
 		if v != "" && v != "0" && v != "false" {
 			return callFn(trueVal)
@@ -86,10 +98,8 @@ func Or(args ...interface{}) interface{} {
 		if v == false {
 			return callFn(args[1])
 		}
-	} else if v, ok := condition.(int); ok {
-		if v == 0 {
-			return callFn(args[1])
-		}
+	} else if isZero(condition) {
+		return callFn(args[1])
 	} else if v, ok := condition.(string); ok {
 		if v != "" && v != "0" && v != "false" {
 			return condition
