@@ -9,12 +9,18 @@ import (
 
 // callFn if args[0] == func, run it
 func callFn(f interface{}) interface{} {
-	if v, ok := f.(func() interface{}); ok {
-		return v()
-	}
-	if v, ok := f.(func()); ok {
-		v()
-		return nil
+	if f != nil {
+		t := reflect.TypeOf(f)
+		if t.Kind() == reflect.Func && t.NumIn() == 0 {
+			function := reflect.ValueOf(f)
+			in := make([]reflect.Value, 0)
+			out := function.Call(in)
+			if len(out) > 0 {
+				value := out[0]
+				return value.Interface()
+			}
+			return nil
+		}
 	}
 	return f
 }

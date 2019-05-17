@@ -2,6 +2,7 @@ package hit
 
 import (
 	"errors"
+	"image"
 	"log"
 	"strings"
 	"testing"
@@ -340,19 +341,35 @@ func TestFnTime1(t *testing.T) {
 	}
 }
 
-func CallFn1(t *testing.T) {
+func TestCallFn1(t *testing.T) {
 	var b int
 	a := callFn(func() { b = 100 })
 	if a != nil && b != 100 {
-		t.Errorf(`a := Or(func() { b = 100 }, 5)`)
+		t.Errorf(`a := callFn(func() { b = 100 })`)
 	}
 }
 
-func CallFn2(t *testing.T) {
+func TestCallFn2(t *testing.T) {
 	var b int
 	a := callFn(func() interface{} { b = 100; return 10 })
 	if a != 10 && b != 100 {
-		t.Errorf(`a := Or(func() { b = 100 }, 5)`)
+		t.Errorf(`a := callFn(func() interface{} { b = 100; return 10 })`)
+	}
+}
+
+func TestCallFn3(t *testing.T) {
+	var b int
+	a := callFn(func() int { b = 100; return 10 })
+	if a != 10 && b != 100 {
+		t.Errorf(`a := callFn(func() int { b = 100; return 10 })`)
+	}
+}
+
+func TestCallFn4(t *testing.T) {
+	var b int
+	a := callFn(func() image.Point { b = 100; return image.Point{0, 0} })
+	if v, ok := a.(image.Point); !ok || (!v.Eq(image.Point{0,0}) && b != 100) {
+		t.Errorf(`a := callFn(func() image.Point { b = 100; return image.Point{0, 0} })`)
 	}
 }
 
