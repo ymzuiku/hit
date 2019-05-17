@@ -78,11 +78,51 @@ func TestIf5(t *testing.T) {
 	}
 }
 
+func TestIf5a(t *testing.T) {
+	expect := 50
+	a := If("0.0", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("0.0", 5, 50)`)
+	}
+}
+
+func TestIf5b(t *testing.T) {
+	expect := 50
+	a := If("-0", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("-0", 5, 50)`)
+	}
+}
+
 func TestIf6(t *testing.T) {
 	expect := 50
 	a := If("false", 5, 50)
 	if a != expect {
 		t.Errorf(`a := If("false", 5, 50)`)
+	}
+}
+
+func TestIf6a(t *testing.T) {
+	expect := 50
+	a := If("FALSE", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("FALSE", 5, 50)`)
+	}
+}
+
+func TestIf6b(t *testing.T) {
+	expect := 50
+	a := If("f", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("f", 5, 50)`)
+	}
+}
+
+func TestIf6c(t *testing.T) {
+	expect := 50
+	a := If("F", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("F", 5, 50)`)
 	}
 }
 
@@ -309,10 +349,45 @@ func TestOr4(t *testing.T) {
 	}
 }
 
+func TestOr4a(t *testing.T) {
+	a := Or("0.0", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("0.0", 5)`)
+	}
+}
+
+func TestOr4b(t *testing.T) {
+	a := Or("-0", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("-0", 5)`)
+	}
+}
+
 func TestOr5(t *testing.T) {
 	a := Or("false", 5)
 	if a != 5 {
 		t.Errorf(`a := Or("false", 5)`)
+	}
+}
+
+func TestOr5a(t *testing.T) {
+	a := Or("FALSE", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("FALSE", 5)`)
+	}
+}
+
+func TestOr5b(t *testing.T) {
+	a := Or("f", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("f", 5)`)
+	}
+}
+
+func TestOr5c(t *testing.T) {
+	a := Or("F", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("F", 5)`)
 	}
 }
 

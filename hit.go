@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"runtime"
+	"strconv"
 	"time"
 )
 
@@ -34,6 +35,17 @@ func isZero(f interface{}) bool  {
 		return v.Uint() == 0
 	case reflect.Float32, reflect.Float64:
 		return v.Float() == 0
+	case reflect.String:
+		str := v.String()
+		if str == "" {
+			return true
+		}
+		zero, error := strconv.ParseFloat(str, 10)
+		if zero == 0 && error == nil {
+			return true
+		}
+		boolean, error := strconv.ParseBool(str)
+		return boolean == false && error == nil
 	default:
 		return false
 	}
@@ -71,11 +83,6 @@ func If(args ...interface{}) interface{} {
 		}
 	} else if isZero(condition) {
 		return callFn(falseVal)
-	} else if v, ok := condition.(string); ok {
-		if v != "" && v != "0" && v != "false" {
-			return callFn(trueVal)
-		}
-		return callFn(falseVal)
 	} else if v, ok := condition.(error); ok {
 		if v != nil {
 			fmt.Println(v)
@@ -99,11 +106,6 @@ func Or(args ...interface{}) interface{} {
 			return callFn(args[1])
 		}
 	} else if isZero(condition) {
-		return callFn(args[1])
-	} else if v, ok := condition.(string); ok {
-		if v != "" && v != "0" && v != "false" {
-			return condition
-		}
 		return callFn(args[1])
 	} else if v, ok := condition.(error); ok {
 		if v != nil {

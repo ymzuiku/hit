@@ -47,8 +47,8 @@ func Or(args ...interface{}) interface{}
 - 0
 - error
 - ""
-- "false"
-- "0"
+- "f", "F", "false", "FALSE", "False"
+- "0", "0.0", "-0"
 
 
 
