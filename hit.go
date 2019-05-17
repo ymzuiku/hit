@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// callFn if args[0] == func, run it
+// callFn if args[i] == func, run it
 func callFn(f interface{}) interface{} {
 	if f != nil {
 		t := reflect.TypeOf(f)
@@ -16,9 +16,15 @@ func callFn(f interface{}) interface{} {
 			function := reflect.ValueOf(f)
 			in := make([]reflect.Value, 0)
 			out := function.Call(in)
-			if len(out) > 0 {
-				value := out[0]
-				return value.Interface()
+			if num := len(out); num > 0 {
+				list := make([]interface{}, num)
+				for i, value := range out {
+					list[i] = value.Interface()
+				}
+				if num == 1 {
+					return list[0]
+				}
+				return list
 			}
 			return nil
 		}

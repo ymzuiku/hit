@@ -213,6 +213,13 @@ func TestIf15(t *testing.T) {
 	}
 }
 
+func TestIf16(t *testing.T) {
+	a := If(20 > 5, func() (string, int) { return "ok", 1 }, func() interface{} { return "cancel" })
+	if v, ok := a.([]interface{}); !ok || v[0] != "ok" || v[1] != 1 {
+		t.Errorf(`a := If(20 > 5, func() (string, int) { return "ok", 1 }, func() interface{} { return "cancel" })`)
+	}
+}
+
 func TestAnd1(t *testing.T) {
 	expect := 5
 	a := If(true, 5)
