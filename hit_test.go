@@ -2,6 +2,7 @@ package hit
 
 import (
 	"errors"
+	"image"
 	"log"
 	"strings"
 	"testing"
@@ -77,6 +78,22 @@ func TestIf5(t *testing.T) {
 	}
 }
 
+func TestIf5a(t *testing.T) {
+	expect := 50
+	a := If("0.0", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("0.0", 5, 50)`)
+	}
+}
+
+func TestIf5b(t *testing.T) {
+	expect := 50
+	a := If("-0", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("-0", 5, 50)`)
+	}
+}
+
 func TestIf6(t *testing.T) {
 	expect := 50
 	a := If("false", 5, 50)
@@ -85,11 +102,51 @@ func TestIf6(t *testing.T) {
 	}
 }
 
+func TestIf6a(t *testing.T) {
+	expect := 50
+	a := If("FALSE", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("FALSE", 5, 50)`)
+	}
+}
+
+func TestIf6b(t *testing.T) {
+	expect := 50
+	a := If("f", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("f", 5, 50)`)
+	}
+}
+
+func TestIf6c(t *testing.T) {
+	expect := 50
+	a := If("F", 5, 50)
+	if a != expect {
+		t.Errorf(`a := If("F", 5, 50)`)
+	}
+}
+
 func TestIf7(t *testing.T) {
 	expect := 50
 	a := If(0, 5, 50)
 	if a != expect {
 		t.Errorf(`a := If(0, 5, 50)`)
+	}
+}
+
+func TestIf7a(t *testing.T) {
+	expect := 50
+	a := If(0.0, 5, 50)
+	if a != expect {
+		t.Errorf(`a := If(0.0, 5, 50)`)
+	}
+}
+
+func TestIf7b(t *testing.T) {
+	expect := 50
+	a := If(uint(0), 5, 50)
+	if a != expect {
+		t.Errorf(`a := If(uint(0), 5, 50)`)
 	}
 }
 
@@ -156,6 +213,13 @@ func TestIf15(t *testing.T) {
 	}
 }
 
+func TestIf16(t *testing.T) {
+	a := If(20 > 5, func() (string, int) { return "ok", 1 }, func() interface{} { return "cancel" })
+	if v, ok := a.([]interface{}); !ok || v[0] != "ok" || v[1] != 1 {
+		t.Errorf(`a := If(20 > 5, func() (string, int) { return "ok", 1 }, func() interface{} { return "cancel" })`)
+	}
+}
+
 func TestAnd1(t *testing.T) {
 	expect := 5
 	a := If(true, 5)
@@ -207,6 +271,27 @@ func TestAnd6(t *testing.T) {
 	}
 }
 
+func TestAnd7(t *testing.T) {
+	a := If(0, 5)
+	if a != nil {
+		t.Errorf(`a := If(0, 5)`)
+	}
+}
+
+func TestAnd7a(t *testing.T) {
+	a := If(0.0, 5)
+	if a != nil {
+		t.Errorf(`a := If(0.0, 5)`)
+	}
+}
+
+func TestAnd7b(t *testing.T) {
+	a := If(uint(0), 5)
+	if a != nil {
+		t.Errorf(`a := If(uint(0), 5)`)
+	}
+}
+
 func TestOr0(t *testing.T) {
 	a := Or(500)
 	if a != 500 {
@@ -250,6 +335,20 @@ func TestOr3(t *testing.T) {
 	}
 }
 
+func TestOr3a(t *testing.T) {
+	a := Or(0.0, 5)
+	if a != 5 {
+		t.Errorf(`a := Or(0.0, 5)`)
+	}
+}
+
+func TestOr3b(t *testing.T) {
+	a := Or(uint(0), 5)
+	if a != 5 {
+		t.Errorf(`a := Or(uint(0), 5)`)
+	}
+}
+
 func TestOr4(t *testing.T) {
 	a := Or("0", 5)
 	if a != 5 {
@@ -257,10 +356,45 @@ func TestOr4(t *testing.T) {
 	}
 }
 
+func TestOr4a(t *testing.T) {
+	a := Or("0.0", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("0.0", 5)`)
+	}
+}
+
+func TestOr4b(t *testing.T) {
+	a := Or("-0", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("-0", 5)`)
+	}
+}
+
 func TestOr5(t *testing.T) {
 	a := Or("false", 5)
 	if a != 5 {
 		t.Errorf(`a := Or("false", 5)`)
+	}
+}
+
+func TestOr5a(t *testing.T) {
+	a := Or("FALSE", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("FALSE", 5)`)
+	}
+}
+
+func TestOr5b(t *testing.T) {
+	a := Or("f", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("f", 5)`)
+	}
+}
+
+func TestOr5c(t *testing.T) {
+	a := Or("F", 5)
+	if a != 5 {
+		t.Errorf(`a := Or("F", 5)`)
 	}
 }
 
@@ -340,19 +474,35 @@ func TestFnTime1(t *testing.T) {
 	}
 }
 
-func CallFn1(t *testing.T) {
+func TestCallFn1(t *testing.T) {
 	var b int
 	a := callFn(func() { b = 100 })
 	if a != nil && b != 100 {
-		t.Errorf(`a := Or(func() { b = 100 }, 5)`)
+		t.Errorf(`a := callFn(func() { b = 100 })`)
 	}
 }
 
-func CallFn2(t *testing.T) {
+func TestCallFn2(t *testing.T) {
 	var b int
 	a := callFn(func() interface{} { b = 100; return 10 })
 	if a != 10 && b != 100 {
-		t.Errorf(`a := Or(func() { b = 100 }, 5)`)
+		t.Errorf(`a := callFn(func() interface{} { b = 100; return 10 })`)
+	}
+}
+
+func TestCallFn3(t *testing.T) {
+	var b int
+	a := callFn(func() int { b = 100; return 10 })
+	if a != 10 && b != 100 {
+		t.Errorf(`a := callFn(func() int { b = 100; return 10 })`)
+	}
+}
+
+func TestCallFn4(t *testing.T) {
+	var b int
+	a := callFn(func() image.Point { b = 100; return image.Point{0, 0} })
+	if v, ok := a.(image.Point); !ok || (!v.Eq(image.Point{0,0}) && b != 100) {
+		t.Errorf(`a := callFn(func() image.Point { b = 100; return image.Point{0, 0} })`)
 	}
 }
 
