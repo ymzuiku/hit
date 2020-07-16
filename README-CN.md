@@ -13,7 +13,7 @@ var c = b && 50  // c = 50
 var fn = c > 40 && func(){ return "ok" } // fn = "ok"
 ```
 
-使用`hit`之后,以上的代码我们可以这样写:
+使用`hit`之后，以上的代码我们可以这样写:
 
 ```go
 var a = If(20 > 50, true, false)  // a = false
@@ -22,7 +22,7 @@ var c = If(b, 50)  // c = 50
 var fn = If(c > 40, func(){ return "ok" }) // fn = "ok"
 ```
 
-抛弃教条,享受 `hit` 吧
+抛弃教条，享受 `hit` 吧
 
 ## 安装
 
@@ -30,7 +30,7 @@ var fn = If(c > 40, func(){ return "ok" }) // fn = "ok"
 $ go get github.com/ymzuiku/hit
 ```
 
-hit只有两个API
+`hit`只有两个API
 
 ```go
 func If(args ...interface{}) interface{}
@@ -144,7 +144,7 @@ func main(){
 hit代码的测试覆盖率为 100%, 查看具体的测试代码: [hit_test.go](./hit_test.go)
 
 
-### 开原协议
+### 开源协议
 
 ```
 MIT License
